@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meu Planner</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --rose:    #f2c4ce;
+    --blush:   #fde8ed;
+    --lilac:   #e8d5f5;
+    --sky:     #d5e8f5;
+    --mint:    #d5f5e8;
+    --butter:  #fdf5d5;
+    --cream:   #fdf8f5;
+    --text:    #5a4a52;
+    --soft:    #b09aa8;
+    --white:   #ffffff;
+    --shadow:  rgba(180,140,160,0.15);
+  }
+
+  body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #fde8ed 0%, #f5e8fd 35%, #e8edf5 70%, #fdf5e8 100%);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 2rem 1rem 4rem;
+  }
+
+  /* floating blobs */
+  body::before, body::after {
+    content: '';
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.35;
+    pointer-events: none;
+    z-index: 0;
+  }
+  body::before {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, #f2c4ce, #e8d5f5);
+    top: -100px; left: -100px;
+    animation: float1 8s ease-in-out infinite;
+  }
+  body::after {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, #d5e8f5, #d5f5e8);
+    bottom: -80px; right: -80px;
+    animation: float2 10s ease-in-out infinite;
+  }
+  @keyframes float1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(30px,20px)} }
+  @keyframes float2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-20px,-30px)} }
+
+  .card {
+    position: relative; z-index: 1;
+    background: rgba(255,255,255,0.72);
+    backdrop-filter: blur(20px);
+    border-radius: 28px;
+    box-shadow: 0 8px 40px var(--shadow), 0 2px 8px rgba(180,140,160,0.08);
+    width: 100%; max-width: 480px;
+    padding: 2.4rem 2rem 2rem;
+    animation: fadeUp .6s cubic-bezier(.22,1,.36,1) both;
+  }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+  /* ── header ── */
+  .header { text-align: center; margin-bottom: 1.8rem; }
+  .header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300; font-style: italic;
+    font-size: 2.2rem;
+    color: var(--text);
+    letter-spacing: .02em;
+    line-height: 1.1;
+  }
+  .header h1 span { color: #c07090; font-weight: 500; }
+  .tagline {
+    font-size: .78rem; font-weight: 300;
+    color: var(--soft); letter-spacing: .12em; text-transform: uppercase;
+    margin-top: .3rem;
+  }
+
+  /* ── date nav ── */
+  .date-nav {
+    display: flex; align-items: center; justify-content: center; gap: .8rem;
+    margin-bottom: 1.6rem;
+  }
+  .nav-btn {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: var(--blush);
+    border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: #c07090; font-size: 1rem;
+    transition: background .2s, transform .15s;
+  }
+  .nav-btn:hover { background: var(--rose); transform: scale(1.1); }
+  .date-display {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem; font-weight: 400;
+    color: var(--text); letter-spacing: .04em;
+    min-width: 180px; text-align: center;
+  }
+  .date-display .weekday {
+    display: block; font-size: .72rem; font-style: italic;
+    color: var(--soft); letter-spacing: .1em; margin-top: .1rem;
+  }
+
+  /* ── progress ── */
+  .progress-wrap { margin-bottom: 1.8rem; }
+  .progress-info {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: .5rem;
+  }
+  .progress-label { font-size: .78rem; font-weight: 500; color: var(--soft); letter-spacing: .08em; text-transform: uppercase; }
+  .progress-pct { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: #c07090; font-weight: 500; }
+  .progress-bar-bg {
+    height: 8px; border-radius: 99px;
+    background: var(--blush);
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%; border-radius: 99px;
+    background: linear-gradient(90deg, #f2c4ce, #c07090);
+    transition: width .5s cubic-bezier(.22,1,.36,1);
+  }
+
+  /* ── activities ── */
+  .activities { display: flex; flex-direction: column; gap: .75rem; }
+
+  .activity-item {
+    background: rgba(255,255,255,0.8);
+    border: 1.5px solid rgba(240,200,215,0.5);
+    border-radius: 16px;
+    padding: .9rem 1rem;
+    display: flex; flex-direction: column; gap: .5rem;
+    transition: box-shadow .2s, border-color .2s, transform .15s;
+    animation: fadeUp .5s cubic-bezier(.22,1,.36,1) both;
+  }
+  .activity-item:hover { box-shadow: 0 4px 18px var(--shadow); transform: translateY(-1px); }
+  .activity-item.done {
+    background: linear-gradient(135deg, rgba(242,196,206,.18), rgba(232,213,245,.18));
+    border-color: rgba(192,112,144,.35);
+  }
+
+  .activity-row { display: flex; align-items: center; gap: .75rem; }
+
+  .check-btn {
+    width: 28px; height: 28px; flex-shrink: 0;
+    border-radius: 50%; border: 2px solid #e8c0ce;
+    background: transparent; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .2s; color: transparent; font-size: .85rem;
+  }
+  .check-btn:hover { border-color: #c07090; background: var(--blush); }
+  .activity-item.done .check-btn {
+    background: linear-gradient(135deg, #f2c4ce, #c07090);
+    border-color: #c07090; color: white;
+  }
+
+  .emoji { font-size: 1.2rem; flex-shrink: 0; }
+
+  .activity-name {
+    flex: 1; font-size: .92rem; font-weight: 400; color: var(--text);
+    transition: color .2s;
+  }
+  .activity-item.done .activity-name { color: var(--soft); text-decoration: line-through; text-decoration-color: #e8c0ce; }
+
+  /* obs toggle */
+  .obs-toggle {
+    background: none; border: none; cursor: pointer;
+    font-size: .72rem; color: var(--soft); letter-spacing: .06em;
+    text-transform: uppercase; font-family: 'DM Sans', sans-serif;
+    padding: 0; margin-left: auto;
+    display: flex; align-items: center; gap: .3rem;
+    transition: color .2s;
+  }
+  .obs-toggle:hover { color: #c07090; }
+  .obs-toggle svg { transition: transform .2s; }
+  .obs-toggle.open svg { transform: rotate(180deg); }
+
+  .obs-field {
+    display: none;
+    animation: slideDown .25s ease both;
+  }
+  .obs-field.open { display: block; }
+  @keyframes slideDown { from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:translateY(0)} }
+
+  .obs-input {
+    width: 100%; border: 1.5px solid rgba(240,200,215,.6);
+    border-radius: 10px; padding: .5rem .75rem;
+    font-family: 'DM Sans', sans-serif; font-size: .85rem;
+    color: var(--text); background: rgba(255,255,255,.7);
+    resize: none; outline: none; min-height: 52px;
+    transition: border-color .2s;
+  }
+  .obs-input::placeholder { color: #d4b0bc; }
+  .obs-input:focus { border-color: #e8a0b8; }
+
+  /* ── add activity ── */
+  .add-section { margin-top: 1.4rem; }
+  .add-row {
+    display: flex; gap: .6rem;
+  }
+  .add-emoji-btn {
+    width: 42px; height: 42px; border-radius: 12px;
+    background: var(--blush); border: 1.5px solid rgba(240,200,215,.6);
+    font-size: 1.1rem; cursor: pointer; flex-shrink: 0;
+    transition: background .2s;
+  }
+  .add-emoji-btn:hover { background: var(--rose); }
+  .add-input {
+    flex: 1; border: 1.5px solid rgba(240,200,215,.6);
+    border-radius: 12px; padding: .5rem .9rem;
+    font-family: 'DM Sans', sans-serif; font-size: .9rem;
+    color: var(--text); background: rgba(255,255,255,.7);
+    outline: none; transition: border-color .2s;
+  }
+  .add-input::placeholder { color: #d4b0bc; }
+  .add-input:focus { border-color: #e8a0b8; }
+  .add-btn {
+    width: 42px; height: 42px; border-radius: 12px;
+    background: linear-gradient(135deg, #f2c4ce, #c07090);
+    border: none; color: white; font-size: 1.3rem;
+    cursor: pointer; flex-shrink: 0;
+    transition: opacity .2s, transform .15s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .add-btn:hover { opacity: .88; transform: scale(1.05); }
+
+  /* emoji picker */
+  .emoji-picker {
+    display: none; flex-wrap: wrap; gap: .4rem;
+    margin-top: .6rem; padding: .7rem;
+    background: rgba(255,255,255,.9); border-radius: 14px;
+    border: 1.5px solid rgba(240,200,215,.5);
+    box-shadow: 0 4px 20px var(--shadow);
+  }
+  .emoji-picker.open { display: flex; }
+  .emoji-opt {
+    width: 32px; height: 32px; border-radius: 8px; border: none;
+    background: var(--blush); cursor: pointer; font-size: 1.05rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .15s, transform .1s;
+  }
+  .emoji-opt:hover { background: var(--rose); transform: scale(1.15); }
+
+  /* ── footer ── */
+  .footer-note {
+    text-align: center; margin-top: 1.8rem;
+    font-size: .72rem; color: #d4b0bc; letter-spacing: .08em;
+  }
+</style>
+</head>
+<body>
+<div class="card">
+
+  <div class="header">
+    <h1>meu <span>planner</span> ✦</h1>
+    <p class="tagline">cada dia, um recomeço</p>
+  </div>
+
+  <!-- date nav -->
+  <div class="date-nav">
+    <button class="nav-btn" onclick="changeDate(-1)">&#8249;</button>
+    <div class="date-display">
+      <span id="dateText">—</span>
+      <span class="weekday" id="weekdayText">—</span>
+    </div>
+    <button class="nav-btn" onclick="changeDate(1)">&#8250;</button>
+  </div>
+
+  <!-- progress -->
+  <div class="progress-wrap">
+    <div class="progress-info">
+      <span class="progress-label">progresso do dia</span>
+      <span class="progress-pct" id="pctText">0%</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressBar" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- activities list -->
+  <div class="activities" id="activitiesList"></div>
+
+  <!-- add activity -->
+  <div class="add-section">
+    <div class="add-row">
+      <button class="add-emoji-btn" id="emojiToggle" onclick="toggleEmojiPicker()" title="Escolher emoji">⭐</button>
+      <input class="add-input" id="newActivityInput" placeholder="Nova atividade…" onkeydown="if(event.key==='Enter') addActivity()">
+      <button class="add-btn" onclick="addActivity()" title="Adicionar">+</button>
+    </div>
+    <div class="emoji-picker" id="emojiPicker"></div>
+  </div>
+
+  <p class="footer-note">✦ seus dados ficam salvos no navegador ✦</p>
+</div>
+
+<script>
+const EMOJIS = ['📖','🏋️','☀️','🏠','📚','✏️','💧','🧘','🎨','🍎','💊','🛁','🌙','🎵','🧹','🛒','💌','🌸','⭐','🦋','🌿','💪','🙏','✨','🎯','📝'];
+const WEEKDAYS = ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'];
+const MONTHS   = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+
+let currentDate = new Date();
+currentDate.setHours(0,0,0,0);
+let selectedEmoji = '⭐';
+
+// ── storage helpers ──
+function storageKey(d) {
+  return `planner_${d.getFullYear()}_${d.getMonth()}_${d.getDate()}`;
+}
+function loadData(d) {
+  try { return JSON.parse(localStorage.getItem(storageKey(d))) || defaultActivities(); }
+  catch { return defaultActivities(); }
+}
+function saveData(d, data) {
+  localStorage.setItem(storageKey(d), JSON.stringify(data));
+}
+function defaultActivities() {
+  return [
+    { id: 1, emoji: '📖', name: 'Devocional',        done: false, obs: '' },
+    { id: 2, emoji: '🏋️', name: 'Musculação / Cardio', done: false, obs: '' },
+    { id: 3, emoji: '☀️', name: 'Tomar sol',          done: false, obs: '' },
+    { id: 4, emoji: '🏠', name: 'Culto no lar',       done: false, obs: '' },
+    { id: 5, emoji: '📚', name: 'Leitura de livro',   done: false, obs: '' },
+  ];
+}
+
+// ── render ──
+function render() {
+  updateDateDisplay();
+  const data = loadData(currentDate);
+  renderActivities(data);
+  updateProgress(data);
+}
+
+function updateDateDisplay() {
+  const d = currentDate;
+  document.getElementById('dateText').textContent =
+    `${String(d.getDate()).padStart(2,'0')} de ${MONTHS[d.getMonth()]} de ${d.getFullYear()}`;
+  document.getElementById('weekdayText').textContent = WEEKDAYS[d.getDay()];
+}
+
+function renderActivities(data) {
+  const list = document.getElementById('activitiesList');
+  list.innerHTML = '';
+  data.forEach((act, i) => {
+    const item = document.createElement('div');
+    item.className = 'activity-item' + (act.done ? ' done' : '');
+    item.style.animationDelay = `${i * 0.06}s`;
+    item.innerHTML = `
+      <div class="activity-row">
+        <button class="check-btn" onclick="toggleDone(${act.id})" title="Marcar como feita">✓</button>
+        <span class="emoji">${act.emoji}</span>
+        <span class="activity-name">${act.name}</span>
+        <button class="obs-toggle" id="obsToggle_${act.id}" onclick="toggleObs(${act.id})">
+          obs
+          <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="#b09aa8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <div class="obs-field${act.obs ? ' open' : ''}" id="obsField_${act.id}">
+        <textarea class="obs-input" placeholder="Adicione uma observação…" oninput="saveObs(${act.id}, this.value)">${act.obs}</textarea>
+      </div>
+    `;
+    list.appendChild(item);
+  });
+}
+
+function updateProgress(data) {
+  const done = data.filter(a => a.done).length;
+  const pct = data.length ? Math.round(done / data.length * 100) : 0;
+  document.getElementById('pctText').textContent = pct + '%';
+  document.getElementById('progressBar').style.width = pct + '%';
+}
+
+// ── interactions ──
+function toggleDone(id) {
+  const data = loadData(currentDate);
+  const act = data.find(a => a.id === id);
+  if (act) act.done = !act.done;
+  saveData(currentDate, data);
+  render();
+}
+
+function toggleObs(id) {
+  const field  = document.getElementById(`obsField_${id}`);
+  const toggle = document.getElementById(`obsToggle_${id}`);
+  field.classList.toggle('open');
+  toggle.classList.toggle('open');
+}
+
+function saveObs(id, val) {
+  const data = loadData(currentDate);
+  const act = data.find(a => a.id === id);
+  if (act) act.obs = val;
+  saveData(currentDate, data);
+  updateProgress(data);
+}
+
+function changeDate(delta) {
+  currentDate = new Date(currentDate);
+  currentDate.setDate(currentDate.getDate() + delta);
+  render();
+}
+
+// ── add activity ──
+function addActivity() {
+  const input = document.getElementById('newActivityInput');
+  const name = input.value.trim();
+  if (!name) return;
+  const data = loadData(currentDate);
+  data.push({ id: Date.now(), emoji: selectedEmoji, name, done: false, obs: '' });
+  saveData(currentDate, data);
+  input.value = '';
+  render();
+}
+
+// ── emoji picker ──
+function buildEmojiPicker() {
+  const picker = document.getElementById('emojiPicker');
+  EMOJIS.forEach(em => {
+    const btn = document.createElement('button');
+    btn.className = 'emoji-opt';
+    btn.textContent = em;
+    btn.onclick = () => { selectedEmoji = em; document.getElementById('emojiToggle').textContent = em; picker.classList.remove('open'); };
+    picker.appendChild(btn);
+  });
+}
+function toggleEmojiPicker() {
+  document.getElementById('emojiPicker').classList.toggle('open');
+}
+
+// ── init ──
+buildEmojiPicker();
+render();
+</script>
+</body>
+</html>
