@@ -33,7 +33,6 @@
     padding: 2rem 1rem 4rem;
   }
 
-  /* floating blobs */
   body::before, body::after {
     content: '';
     position: fixed;
@@ -70,7 +69,6 @@
   }
   @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
 
-  /* ── header ── */
   .header { text-align: center; margin-bottom: 1.8rem; }
   .header h1 {
     font-family: 'Cormorant Garamond', serif;
@@ -87,7 +85,6 @@
     margin-top: .3rem;
   }
 
-  /* ── date nav ── */
   .date-nav {
     display: flex; align-items: center; justify-content: center; gap: .8rem;
     margin-bottom: 1.6rem;
@@ -112,7 +109,6 @@
     color: var(--soft); letter-spacing: .1em; margin-top: .1rem;
   }
 
-  /* ── progress ── */
   .progress-wrap { margin-bottom: 1.8rem; }
   .progress-info {
     display: flex; justify-content: space-between; align-items: baseline;
@@ -131,7 +127,6 @@
     transition: width .5s cubic-bezier(.22,1,.36,1);
   }
 
-  /* ── activities ── */
   .activities { display: flex; flex-direction: column; gap: .75rem; }
 
   .activity-item {
@@ -147,6 +142,11 @@
   .activity-item.done {
     background: linear-gradient(135deg, rgba(242,196,206,.18), rgba(232,213,245,.18));
     border-color: rgba(192,112,144,.35);
+  }
+  .activity-item.no-count {
+    border-style: dashed;
+    border-color: rgba(240,200,215,0.4);
+    background: rgba(255,255,255,0.6);
   }
 
   .activity-row { display: flex; align-items: center; gap: .75rem; }
@@ -172,12 +172,19 @@
   }
   .activity-item.done .activity-name { color: var(--soft); text-decoration: line-through; text-decoration-color: #e8c0ce; }
 
-  /* obs toggle */
+  .no-count-badge {
+    font-size: .65rem; color: var(--soft); letter-spacing: .06em;
+    background: var(--blush); border-radius: 99px; padding: .15rem .5rem;
+    white-space: nowrap; flex-shrink: 0;
+  }
+
+  .action-btns { display: flex; gap: .5rem; align-items: center; flex-shrink: 0; }
+
   .obs-toggle {
     background: none; border: none; cursor: pointer;
     font-size: .72rem; color: var(--soft); letter-spacing: .06em;
     text-transform: uppercase; font-family: 'DM Sans', sans-serif;
-    padding: 0; margin-left: auto;
+    padding: 0;
     display: flex; align-items: center; gap: .3rem;
     transition: color .2s;
   }
@@ -185,10 +192,16 @@
   .obs-toggle svg { transition: transform .2s; }
   .obs-toggle.open svg { transform: rotate(180deg); }
 
-  .obs-field {
-    display: none;
-    animation: slideDown .25s ease both;
+  .delete-btn {
+    background: none; border: none; cursor: pointer;
+    font-size: .8rem; color: #e8c0ce;
+    display: flex; align-items: center;
+    transition: color .2s, transform .15s;
+    padding: 0;
   }
+  .delete-btn:hover { color: #c07090; transform: scale(1.2); }
+
+  .obs-field { display: none; animation: slideDown .25s ease both; }
   .obs-field.open { display: block; }
   @keyframes slideDown { from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:translateY(0)} }
 
@@ -203,11 +216,16 @@
   .obs-input::placeholder { color: #d4b0bc; }
   .obs-input:focus { border-color: #e8a0b8; }
 
-  /* ── add activity ── */
-  .add-section { margin-top: 1.4rem; }
-  .add-row {
-    display: flex; gap: .6rem;
+  .section-label {
+    font-size: .7rem; font-weight: 500; color: var(--soft);
+    letter-spacing: .12em; text-transform: uppercase;
+    margin: 1.2rem 0 .5rem;
+    display: flex; align-items: center; gap: .5rem;
   }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: rgba(240,200,215,.5); }
+
+  .add-section { margin-top: 1.4rem; }
+  .add-row { display: flex; gap: .6rem; }
   .add-emoji-btn {
     width: 42px; height: 42px; border-radius: 12px;
     background: var(--blush); border: 1.5px solid rgba(240,200,215,.6);
@@ -234,7 +252,18 @@
   }
   .add-btn:hover { opacity: .88; transform: scale(1.05); }
 
-  /* emoji picker */
+  .add-options { display: flex; gap: .4rem; margin-top: .6rem; flex-wrap: wrap; align-items: center; }
+  .add-options-label { font-size: .72rem; color: var(--soft); letter-spacing: .06em; white-space: nowrap; }
+  .add-option-btn {
+    font-size: .72rem; padding: .28rem .6rem; border-radius: 99px;
+    border: 1.5px solid rgba(240,200,215,.6);
+    background: rgba(255,255,255,.7); color: var(--soft);
+    cursor: pointer; font-family: 'DM Sans', sans-serif;
+    transition: all .2s; letter-spacing: .03em;
+  }
+  .add-option-btn:hover { background: var(--blush); border-color: #e8a0b8; color: #c07090; }
+  .add-option-btn.active { background: var(--blush); border-color: #e8a0b8; color: #c07090; font-weight: 500; }
+
   .emoji-picker {
     display: none; flex-wrap: wrap; gap: .4rem;
     margin-top: .6rem; padding: .7rem;
@@ -251,10 +280,13 @@
   }
   .emoji-opt:hover { background: var(--rose); transform: scale(1.15); }
 
-  /* ── footer ── */
   .footer-note {
     text-align: center; margin-top: 1.8rem;
     font-size: .72rem; color: #d4b0bc; letter-spacing: .08em;
+  }
+  .empty-day {
+    text-align: center; padding: 1.5rem;
+    color: var(--soft); font-size: .88rem; font-style: italic; line-height: 1.8;
   }
 </style>
 </head>
@@ -266,7 +298,6 @@
     <p class="tagline">cada dia, um recomeço</p>
   </div>
 
-  <!-- date nav -->
   <div class="date-nav">
     <button class="nav-btn" onclick="changeDate(-1)">&#8249;</button>
     <div class="date-display">
@@ -276,7 +307,6 @@
     <button class="nav-btn" onclick="changeDate(1)">&#8250;</button>
   </div>
 
-  <!-- progress -->
   <div class="progress-wrap">
     <div class="progress-info">
       <span class="progress-label">progresso do dia</span>
@@ -287,15 +317,27 @@
     </div>
   </div>
 
-  <!-- activities list -->
   <div class="activities" id="activitiesList"></div>
 
-  <!-- add activity -->
   <div class="add-section">
+    <div class="section-label">adicionar atividade</div>
     <div class="add-row">
-      <button class="add-emoji-btn" id="emojiToggle" onclick="toggleEmojiPicker()" title="Escolher emoji">⭐</button>
+      <button class="add-emoji-btn" id="emojiToggle" onclick="toggleEmojiPicker()">⭐</button>
       <input class="add-input" id="newActivityInput" placeholder="Nova atividade…" onkeydown="if(event.key==='Enter') addActivity()">
-      <button class="add-btn" onclick="addActivity()" title="Adicionar">+</button>
+      <button class="add-btn" onclick="addActivity()">+</button>
+    </div>
+    <div class="add-options" id="daySelector">
+      <span class="add-options-label">dias:</span>
+      <button class="add-option-btn" data-day="0" onclick="toggleDay(this)">Dom</button>
+      <button class="add-option-btn active" data-day="1" onclick="toggleDay(this)">Seg</button>
+      <button class="add-option-btn active" data-day="2" onclick="toggleDay(this)">Ter</button>
+      <button class="add-option-btn active" data-day="3" onclick="toggleDay(this)">Qua</button>
+      <button class="add-option-btn active" data-day="4" onclick="toggleDay(this)">Qui</button>
+      <button class="add-option-btn active" data-day="5" onclick="toggleDay(this)">Sex</button>
+      <button class="add-option-btn" data-day="6" onclick="toggleDay(this)">Sáb</button>
+    </div>
+    <div class="add-options">
+      <button class="add-option-btn" id="noCountToggle" onclick="toggleNoCount()">✦ não contar no progresso</button>
     </div>
     <div class="emoji-picker" id="emojiPicker"></div>
   </div>
@@ -304,41 +346,58 @@
 </div>
 
 <script>
-const EMOJIS = ['📖','🏋️','☀️','🏠','📚','✏️','💧','🧘','🎨','🍎','💊','🛁','🌙','🎵','🧹','🛒','💌','🌸','⭐','🦋','🌿','💪','🙏','✨','🎯','📝'];
+const EMOJIS = ['📖','🏋️','☀️','🏠','📚','✏️','💧','🧘','🎨','🍎','💊','🛁','🌙','🎵','🧹','🛒','💌','🌸','⭐','🦋','🌿','💪','🙏','✨','🎯','📝','👟','🏃','🥗','🫧'];
 const WEEKDAYS = ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'];
 const MONTHS   = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+
+// 0=Dom 1=Seg 2=Ter 3=Qua 4=Qui 5=Sex 6=Sáb
+const DEFAULT_ACTIVITIES = [
+  { id: 1, emoji: '📖', name: 'Devocional',     days: [0,1,2,3,4,5,6], countProgress: true  },
+  { id: 2, emoji: '🏋️', name: 'Musculação',      days: [1,2,4,5],       countProgress: true  },
+  { id: 3, emoji: '🏃', name: 'Cardio',          days: [1,3,6],         countProgress: true  },
+  { id: 4, emoji: '☀️', name: 'Tomar sol',       days: [0,1,2,3,4,5,6], countProgress: true  },
+  { id: 5, emoji: '🏠', name: 'Culto no lar',    days: [3],             countProgress: true  },
+  { id: 6, emoji: '📚', name: 'Leitura',         days: [0,1,2,3,4,5,6], countProgress: true  },
+  { id: 7, emoji: '👟', name: '8 mil passos',    days: [0,1,2,3,4,5,6], countProgress: true  },
+  { id: 9, emoji: '💑', name: 'Orar com o marido', days: [0,1,2,3,4,5,6], countProgress: true  },
+  { id: 8, emoji: '🍎', name: 'Alimentação',     days: [0,1,2,3,4,5,6], countProgress: false },
+];
 
 let currentDate = new Date();
 currentDate.setHours(0,0,0,0);
 let selectedEmoji = '⭐';
+let newActivityDays = [1,2,3,4,5];
+let newActivityNoCount = false;
 
-// ── storage helpers ──
-function storageKey(d) {
-  return `planner_${d.getFullYear()}_${d.getMonth()}_${d.getDate()}`;
-}
-function loadData(d) {
-  try { return JSON.parse(localStorage.getItem(storageKey(d))) || defaultActivities(); }
-  catch { return defaultActivities(); }
-}
-function saveData(d, data) {
-  localStorage.setItem(storageKey(d), JSON.stringify(data));
-}
-function defaultActivities() {
-  return [
-    { id: 1, emoji: '📖', name: 'Devocional',        done: false, obs: '' },
-    { id: 2, emoji: '🏋️', name: 'Musculação / Cardio', done: false, obs: '' },
-    { id: 3, emoji: '☀️', name: 'Tomar sol',          done: false, obs: '' },
-    { id: 4, emoji: '🏠', name: 'Culto no lar',       done: false, obs: '' },
-    { id: 5, emoji: '📚', name: 'Leitura de livro',   done: false, obs: '' },
-  ];
+function dateKey(d) { return `${d.getFullYear()}_${d.getMonth()}_${d.getDate()}`; }
+function storageKey(d) { return `planner_states_${dateKey(d)}`; }
+function deletedKey(d) { return `planner_deleted_${dateKey(d)}`; }
+function customKey(d)  { return `planner_custom_${dateKey(d)}`; }
+
+function getStates(d)  { try { return JSON.parse(localStorage.getItem(storageKey(d))) || {}; } catch { return {}; } }
+function setStates(d,o){ localStorage.setItem(storageKey(d), JSON.stringify(o)); }
+function getDeleted(d) { try { return JSON.parse(localStorage.getItem(deletedKey(d))) || []; } catch { return []; } }
+function setDeleted(d,a){ localStorage.setItem(deletedKey(d), JSON.stringify(a)); }
+function getCustom(d)  { try { return JSON.parse(localStorage.getItem(customKey(d))) || []; } catch { return []; } }
+function setCustom(d,a){ localStorage.setItem(customKey(d), JSON.stringify(a)); }
+
+function buildDayActivities(d) {
+  const dow = d.getDay();
+  const deleted = getDeleted(d);
+  const custom  = getCustom(d);
+  const states  = getStates(d);
+  const defaults = DEFAULT_ACTIVITIES
+    .filter(a => a.days.includes(dow) && !deleted.includes(a.id))
+    .map(a => ({ ...a, done: !!states[a.id], obs: states[`obs_${a.id}`] || '' }));
+  const customs = custom.map(a => ({ ...a, done: !!states[a.id], obs: states[`obs_${a.id}`] || '' }));
+  return [...defaults, ...customs];
 }
 
-// ── render ──
 function render() {
   updateDateDisplay();
-  const data = loadData(currentDate);
-  renderActivities(data);
-  updateProgress(data);
+  const activities = buildDayActivities(currentDate);
+  renderActivities(activities);
+  updateProgress(activities);
 }
 
 function updateDateDisplay() {
@@ -348,60 +407,86 @@ function updateDateDisplay() {
   document.getElementById('weekdayText').textContent = WEEKDAYS[d.getDay()];
 }
 
-function renderActivities(data) {
+function renderActivities(activities) {
   const list = document.getElementById('activitiesList');
   list.innerHTML = '';
-  data.forEach((act, i) => {
-    const item = document.createElement('div');
-    item.className = 'activity-item' + (act.done ? ' done' : '');
-    item.style.animationDelay = `${i * 0.06}s`;
-    item.innerHTML = `
-      <div class="activity-row">
-        <button class="check-btn" onclick="toggleDone(${act.id})" title="Marcar como feita">✓</button>
-        <span class="emoji">${act.emoji}</span>
-        <span class="activity-name">${act.name}</span>
+  if (!activities.length) {
+    list.innerHTML = '<p class="empty-day">Nenhuma atividade para hoje 🌸<br>Adicione uma abaixo!</p>';
+    return;
+  }
+  const countable   = activities.filter(a => a.countProgress);
+  const uncountable = activities.filter(a => !a.countProgress);
+  countable.forEach((act, i) => list.appendChild(makeItem(act, i)));
+  if (uncountable.length) {
+    const lbl = document.createElement('div');
+    lbl.className = 'section-label';
+    lbl.textContent = 'acompanhamento';
+    list.appendChild(lbl);
+    uncountable.forEach((act, i) => list.appendChild(makeItem(act, i)));
+  }
+}
+
+function makeItem(act, i) {
+  const item = document.createElement('div');
+  item.className = 'activity-item' + (act.done ? ' done' : '') + (!act.countProgress ? ' no-count' : '');
+  item.style.animationDelay = `${i * 0.06}s`;
+  item.innerHTML = `
+    <div class="activity-row">
+      <button class="check-btn" onclick="toggleDone(${act.id})">✓</button>
+      <span class="emoji">${act.emoji}</span>
+      <span class="activity-name">${act.name}</span>
+      ${!act.countProgress ? '<span class="no-count-badge">livre</span>' : ''}
+      <div class="action-btns">
         <button class="obs-toggle" id="obsToggle_${act.id}" onclick="toggleObs(${act.id})">
           obs
           <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="#b09aa8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
+        <button class="delete-btn" onclick="deleteActivity(${act.id})" title="Remover hoje">✕</button>
       </div>
-      <div class="obs-field${act.obs ? ' open' : ''}" id="obsField_${act.id}">
-        <textarea class="obs-input" placeholder="Adicione uma observação…" oninput="saveObs(${act.id}, this.value)">${act.obs}</textarea>
-      </div>
-    `;
-    list.appendChild(item);
-  });
+    </div>
+    <div class="obs-field${act.obs ? ' open' : ''}" id="obsField_${act.id}">
+      <textarea class="obs-input" placeholder="Adicione uma observação…" oninput="saveObs(${act.id}, this.value)">${act.obs}</textarea>
+    </div>
+  `;
+  return item;
 }
 
-function updateProgress(data) {
-  const done = data.filter(a => a.done).length;
-  const pct = data.length ? Math.round(done / data.length * 100) : 0;
+function updateProgress(activities) {
+  const countable = activities.filter(a => a.countProgress);
+  const done = countable.filter(a => a.done).length;
+  const pct = countable.length ? Math.round(done / countable.length * 100) : 0;
   document.getElementById('pctText').textContent = pct + '%';
   document.getElementById('progressBar').style.width = pct + '%';
 }
 
-// ── interactions ──
 function toggleDone(id) {
-  const data = loadData(currentDate);
-  const act = data.find(a => a.id === id);
-  if (act) act.done = !act.done;
-  saveData(currentDate, data);
+  const s = getStates(currentDate);
+  s[id] = !s[id];
+  setStates(currentDate, s);
   render();
 }
 
 function toggleObs(id) {
-  const field  = document.getElementById(`obsField_${id}`);
-  const toggle = document.getElementById(`obsToggle_${id}`);
-  field.classList.toggle('open');
-  toggle.classList.toggle('open');
+  document.getElementById(`obsField_${id}`).classList.toggle('open');
+  document.getElementById(`obsToggle_${id}`).classList.toggle('open');
 }
 
 function saveObs(id, val) {
-  const data = loadData(currentDate);
-  const act = data.find(a => a.id === id);
-  if (act) act.obs = val;
-  saveData(currentDate, data);
-  updateProgress(data);
+  const s = getStates(currentDate);
+  s[`obs_${id}`] = val;
+  setStates(currentDate, s);
+  updateProgress(buildDayActivities(currentDate));
+}
+
+function deleteActivity(id) {
+  if (DEFAULT_ACTIVITIES.find(a => a.id === id)) {
+    const del = getDeleted(currentDate);
+    if (!del.includes(id)) del.push(id);
+    setDeleted(currentDate, del);
+  } else {
+    setCustom(currentDate, getCustom(currentDate).filter(a => a.id !== id));
+  }
+  render();
 }
 
 function changeDate(delta) {
@@ -410,19 +495,27 @@ function changeDate(delta) {
   render();
 }
 
-// ── add activity ──
 function addActivity() {
   const input = document.getElementById('newActivityInput');
   const name = input.value.trim();
   if (!name) return;
-  const data = loadData(currentDate);
-  data.push({ id: Date.now(), emoji: selectedEmoji, name, done: false, obs: '' });
-  saveData(currentDate, data);
+  const custom = getCustom(currentDate);
+  custom.push({ id: Date.now(), emoji: selectedEmoji, name, days: [...newActivityDays], countProgress: !newActivityNoCount });
+  setCustom(currentDate, custom);
   input.value = '';
   render();
 }
 
-// ── emoji picker ──
+function toggleDay(btn) {
+  btn.classList.toggle('active');
+  newActivityDays = Array.from(document.querySelectorAll('#daySelector .add-option-btn.active')).map(b => parseInt(b.dataset.day));
+}
+
+function toggleNoCount() {
+  newActivityNoCount = !newActivityNoCount;
+  document.getElementById('noCountToggle').classList.toggle('active', newActivityNoCount);
+}
+
 function buildEmojiPicker() {
   const picker = document.getElementById('emojiPicker');
   EMOJIS.forEach(em => {
@@ -433,11 +526,8 @@ function buildEmojiPicker() {
     picker.appendChild(btn);
   });
 }
-function toggleEmojiPicker() {
-  document.getElementById('emojiPicker').classList.toggle('open');
-}
+function toggleEmojiPicker() { document.getElementById('emojiPicker').classList.toggle('open'); }
 
-// ── init ──
 buildEmojiPicker();
 render();
 </script>
