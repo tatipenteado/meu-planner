@@ -6,288 +6,248 @@
 <title>Meu Planner</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --rose: #f2c4ce; --blush: #fde8ed; --lilac: #e8d5f5;
+  --text: #5a4a52; --soft: #b09aa8; --shadow: rgba(180,140,160,0.15);
+}
+body {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #fde8ed 0%, #f5e8fd 35%, #e8edf5 70%, #fdf5e8 100%);
+  font-family: 'DM Sans', sans-serif; color: var(--text);
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: 2rem 1rem 4rem;
+}
+body::before, body::after {
+  content: ''; position: fixed; border-radius: 50%;
+  filter: blur(80px); opacity: 0.35; pointer-events: none; z-index: 0;
+}
+body::before {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, #f2c4ce, #e8d5f5);
+  top: -100px; left: -100px; animation: float1 8s ease-in-out infinite;
+}
+body::after {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, #d5e8f5, #d5f5e8);
+  bottom: -80px; right: -80px; animation: float2 10s ease-in-out infinite;
+}
+@keyframes float1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(30px,20px)} }
+@keyframes float2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-20px,-30px)} }
 
-  :root {
-    --rose:    #f2c4ce;
-    --blush:   #fde8ed;
-    --lilac:   #e8d5f5;
-    --sky:     #d5e8f5;
-    --mint:    #d5f5e8;
-    --butter:  #fdf5d5;
-    --cream:   #fdf8f5;
-    --text:    #5a4a52;
-    --soft:    #b09aa8;
-    --white:   #ffffff;
-    --shadow:  rgba(180,140,160,0.15);
-  }
+.card {
+  position: relative; z-index: 1;
+  background: rgba(255,255,255,0.72); backdrop-filter: blur(20px);
+  border-radius: 28px; box-shadow: 0 8px 40px var(--shadow);
+  width: 100%; max-width: 480px; padding: 2.2rem 1.8rem 2rem;
+  animation: fadeUp .6s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
 
-  body {
-    min-height: 100vh;
-    background: linear-gradient(135deg, #fde8ed 0%, #f5e8fd 35%, #e8edf5 70%, #fdf5e8 100%);
-    font-family: 'DM Sans', sans-serif;
-    color: var(--text);
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 2rem 1rem 4rem;
-  }
+/* header */
+.header { text-align: center; margin-bottom: 1rem; }
+.header h1 {
+  font-family: 'Cormorant Garamond', serif; font-weight: 300; font-style: italic;
+  font-size: 2.1rem; color: var(--text); letter-spacing: .02em;
+}
+.header h1 span { color: #c07090; font-weight: 500; }
+.tagline { font-size: .75rem; color: var(--soft); letter-spacing: .12em; text-transform: uppercase; margin-top: .25rem; }
 
-  body::before, body::after {
-    content: '';
-    position: fixed;
-    border-radius: 50%;
-    filter: blur(80px);
-    opacity: 0.35;
-    pointer-events: none;
-    z-index: 0;
-  }
-  body::before {
-    width: 500px; height: 500px;
-    background: radial-gradient(circle, #f2c4ce, #e8d5f5);
-    top: -100px; left: -100px;
-    animation: float1 8s ease-in-out infinite;
-  }
-  body::after {
-    width: 400px; height: 400px;
-    background: radial-gradient(circle, #d5e8f5, #d5f5e8);
-    bottom: -80px; right: -80px;
-    animation: float2 10s ease-in-out infinite;
-  }
-  @keyframes float1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(30px,20px)} }
-  @keyframes float2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-20px,-30px)} }
+/* verse */
+.verse-box {
+  background: linear-gradient(135deg, rgba(242,196,206,.2), rgba(232,213,245,.2));
+  border: 1px solid rgba(240,200,215,.5); border-radius: 16px;
+  padding: .9rem 1.1rem; margin-bottom: 1.4rem; text-align: center;
+}
+.verse-text { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1rem; color: var(--text); line-height: 1.5; }
+.verse-ref { font-size: .72rem; color: var(--soft); margin-top: .3rem; letter-spacing: .06em; }
 
-  .card {
-    position: relative; z-index: 1;
-    background: rgba(255,255,255,0.72);
-    backdrop-filter: blur(20px);
-    border-radius: 28px;
-    box-shadow: 0 8px 40px var(--shadow), 0 2px 8px rgba(180,140,160,0.08);
-    width: 100%; max-width: 480px;
-    padding: 2.4rem 2rem 2rem;
-    animation: fadeUp .6s cubic-bezier(.22,1,.36,1) both;
-  }
-  @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+/* tabs */
+.tabs { display: flex; gap: .4rem; margin-bottom: 1.4rem; }
+.tab-btn {
+  flex: 1; padding: .5rem; border-radius: 12px; border: 1.5px solid rgba(240,200,215,.5);
+  background: rgba(255,255,255,.6); color: var(--soft); font-family: 'DM Sans', sans-serif;
+  font-size: .78rem; cursor: pointer; transition: all .2s; letter-spacing: .04em;
+}
+.tab-btn.active { background: var(--blush); border-color: #e8a0b8; color: #c07090; font-weight: 500; }
 
-  .header { text-align: center; margin-bottom: 1.8rem; }
-  .header h1 {
-    font-family: 'Cormorant Garamond', serif;
-    font-weight: 300; font-style: italic;
-    font-size: 2.2rem;
-    color: var(--text);
-    letter-spacing: .02em;
-    line-height: 1.1;
-  }
-  .header h1 span { color: #c07090; font-weight: 500; }
-  .tagline {
-    font-size: .78rem; font-weight: 300;
-    color: var(--soft); letter-spacing: .12em; text-transform: uppercase;
-    margin-top: .3rem;
-  }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
 
-  .date-nav {
-    display: flex; align-items: center; justify-content: center; gap: .8rem;
-    margin-bottom: 1.6rem;
-  }
-  .nav-btn {
-    width: 34px; height: 34px; border-radius: 50%;
-    background: var(--blush);
-    border: none; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    color: #c07090; font-size: 1rem;
-    transition: background .2s, transform .15s;
-  }
-  .nav-btn:hover { background: var(--rose); transform: scale(1.1); }
-  .date-display {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.15rem; font-weight: 400;
-    color: var(--text); letter-spacing: .04em;
-    min-width: 180px; text-align: center;
-  }
-  .date-display .weekday {
-    display: block; font-size: .72rem; font-style: italic;
-    color: var(--soft); letter-spacing: .1em; margin-top: .1rem;
-  }
+/* date nav */
+.date-nav { display: flex; align-items: center; justify-content: center; gap: .8rem; margin-bottom: 1.2rem; }
+.nav-btn {
+  width: 34px; height: 34px; border-radius: 50%; background: var(--blush);
+  border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  color: #c07090; font-size: 1rem; transition: background .2s, transform .15s;
+}
+.nav-btn:hover { background: var(--rose); transform: scale(1.1); }
+.date-display { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: var(--text); min-width: 180px; text-align: center; }
+.date-display .weekday { display: block; font-size: .7rem; font-style: italic; color: var(--soft); letter-spacing: .1em; margin-top: .1rem; }
 
-  .progress-wrap { margin-bottom: 1.8rem; }
-  .progress-info {
-    display: flex; justify-content: space-between; align-items: baseline;
-    margin-bottom: .5rem;
-  }
-  .progress-label { font-size: .78rem; font-weight: 500; color: var(--soft); letter-spacing: .08em; text-transform: uppercase; }
-  .progress-pct { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: #c07090; font-weight: 500; }
-  .progress-bar-bg {
-    height: 8px; border-radius: 99px;
-    background: var(--blush);
-    overflow: hidden;
-  }
-  .progress-bar-fill {
-    height: 100%; border-radius: 99px;
-    background: linear-gradient(90deg, #f2c4ce, #c07090);
-    transition: width .5s cubic-bezier(.22,1,.36,1);
-  }
+/* streak */
+.streak-bar { display: flex; align-items: center; justify-content: center; gap: .4rem; margin-bottom: 1.1rem; }
+.streak-badge {
+  background: linear-gradient(135deg, #f2c4ce, #c07090); color: white;
+  border-radius: 99px; padding: .25rem .75rem; font-size: .78rem; font-weight: 500;
+  display: flex; align-items: center; gap: .3rem;
+}
+.streak-label { font-size: .75rem; color: var(--soft); }
 
-  .activities { display: flex; flex-direction: column; gap: .75rem; }
+/* mood */
+.mood-row { display: flex; gap: .4rem; margin-bottom: 1.2rem; align-items: center; }
+.mood-label { font-size: .75rem; color: var(--soft); letter-spacing: .06em; text-transform: uppercase; flex-shrink: 0; }
+.mood-btn {
+  flex: 1; padding: .35rem .3rem; border-radius: 10px;
+  border: 1.5px solid rgba(240,200,215,.5); background: rgba(255,255,255,.6);
+  color: var(--soft); font-size: .75rem; cursor: pointer; font-family: 'DM Sans', sans-serif;
+  transition: all .2s; text-align: center;
+}
+.mood-btn:hover { background: var(--blush); border-color: #e8a0b8; }
+.mood-btn.active { border-color: #c07090; font-weight: 500; }
+.mood-btn[data-mood="ótimo"].active  { background: #d5f5e8; color: #3a9a6a; border-color: #3a9a6a; }
+.mood-btn[data-mood="bem"].active    { background: #d5e8f5; color: #3a6a9a; border-color: #3a6a9a; }
+.mood-btn[data-mood="ok"].active     { background: #fdf5d5; color: #9a8a3a; border-color: #9a8a3a; }
+.mood-btn[data-mood="difícil"].active{ background: #fde8ed; color: #c07090; border-color: #c07090; }
 
-  .activity-item {
-    background: rgba(255,255,255,0.8);
-    border: 1.5px solid rgba(240,200,215,0.5);
-    border-radius: 16px;
-    padding: .9rem 1rem;
-    display: flex; flex-direction: column; gap: .5rem;
-    transition: box-shadow .2s, border-color .2s, transform .15s;
-    animation: fadeUp .5s cubic-bezier(.22,1,.36,1) both;
-  }
-  .activity-item:hover { box-shadow: 0 4px 18px var(--shadow); transform: translateY(-1px); }
-  .activity-item.done {
-    background: linear-gradient(135deg, rgba(242,196,206,.18), rgba(232,213,245,.18));
-    border-color: rgba(192,112,144,.35);
-  }
-  .activity-item.no-count {
-    border-style: dashed;
-    border-color: rgba(240,200,215,0.4);
-    background: rgba(255,255,255,0.6);
-  }
+/* progress */
+.progress-wrap { margin-bottom: 1.4rem; }
+.progress-info { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: .5rem; }
+.progress-label { font-size: .75rem; font-weight: 500; color: var(--soft); letter-spacing: .08em; text-transform: uppercase; }
+.progress-pct { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: #c07090; font-weight: 500; }
+.progress-bar-bg { height: 8px; border-radius: 99px; background: var(--blush); overflow: hidden; }
+.progress-bar-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, #f2c4ce, #c07090); transition: width .5s cubic-bezier(.22,1,.36,1); }
 
-  .activity-row { display: flex; align-items: center; gap: .75rem; }
+/* activities */
+.activities { display: flex; flex-direction: column; gap: .65rem; }
+.activity-item {
+  background: rgba(255,255,255,0.8); border: 1.5px solid rgba(240,200,215,0.5);
+  border-radius: 16px; padding: .8rem .9rem;
+  display: flex; flex-direction: column; gap: .45rem;
+  transition: box-shadow .2s, transform .15s;
+  animation: fadeUp .5s cubic-bezier(.22,1,.36,1) both;
+}
+.activity-item:hover { box-shadow: 0 4px 18px var(--shadow); transform: translateY(-1px); }
+.activity-item.done { background: linear-gradient(135deg, rgba(242,196,206,.18), rgba(232,213,245,.18)); border-color: rgba(192,112,144,.35); }
+.activity-item.no-count { border-style: dashed; border-color: rgba(240,200,215,0.4); background: rgba(255,255,255,0.6); }
 
-  .check-btn {
-    width: 28px; height: 28px; flex-shrink: 0;
-    border-radius: 50%; border: 2px solid #e8c0ce;
-    background: transparent; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: all .2s; color: transparent; font-size: .85rem;
-  }
-  .check-btn:hover { border-color: #c07090; background: var(--blush); }
-  .activity-item.done .check-btn {
-    background: linear-gradient(135deg, #f2c4ce, #c07090);
-    border-color: #c07090; color: white;
-  }
+.activity-row { display: flex; align-items: center; gap: .65rem; }
+.check-btn {
+  width: 26px; height: 26px; flex-shrink: 0; border-radius: 50%;
+  border: 2px solid #e8c0ce; background: transparent; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .2s; color: transparent; font-size: .8rem;
+}
+.check-btn:hover { border-color: #c07090; background: var(--blush); }
+.activity-item.done .check-btn { background: linear-gradient(135deg, #f2c4ce, #c07090); border-color: #c07090; color: white; }
+.emoji { font-size: 1.1rem; flex-shrink: 0; }
+.activity-name { flex: 1; font-size: .88rem; color: var(--text); transition: color .2s; }
+.activity-item.done .activity-name { color: var(--soft); text-decoration: line-through; text-decoration-color: #e8c0ce; }
+.no-count-badge { font-size: .62rem; color: var(--soft); background: var(--blush); border-radius: 99px; padding: .12rem .45rem; white-space: nowrap; flex-shrink: 0; }
+.action-btns { display: flex; gap: .45rem; align-items: center; flex-shrink: 0; }
+.obs-toggle {
+  background: none; border: none; cursor: pointer; font-size: .7rem; color: var(--soft);
+  letter-spacing: .06em; text-transform: uppercase; font-family: 'DM Sans', sans-serif;
+  padding: 0; display: flex; align-items: center; gap: .25rem; transition: color .2s;
+}
+.obs-toggle:hover { color: #c07090; }
+.obs-toggle svg { transition: transform .2s; }
+.obs-toggle.open svg { transform: rotate(180deg); }
+.delete-btn { background: none; border: none; cursor: pointer; font-size: .78rem; color: #e8c0ce; transition: color .2s, transform .15s; padding: 0; }
+.delete-btn:hover { color: #c07090; transform: scale(1.2); }
+.obs-field { display: none; animation: slideDown .25s ease both; }
+.obs-field.open { display: block; }
+@keyframes slideDown { from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:translateY(0)} }
+.obs-input {
+  width: 100%; border: 1.5px solid rgba(240,200,215,.6); border-radius: 10px;
+  padding: .45rem .7rem; font-family: 'DM Sans', sans-serif; font-size: .82rem;
+  color: var(--text); background: rgba(255,255,255,.7); resize: none; outline: none; min-height: 48px;
+  transition: border-color .2s;
+}
+.obs-input::placeholder { color: #d4b0bc; }
+.obs-input:focus { border-color: #e8a0b8; }
 
-  .emoji { font-size: 1.2rem; flex-shrink: 0; }
+.section-label {
+  font-size: .68rem; font-weight: 500; color: var(--soft); letter-spacing: .12em;
+  text-transform: uppercase; margin: 1rem 0 .45rem;
+  display: flex; align-items: center; gap: .5rem;
+}
+.section-label::after { content: ''; flex: 1; height: 1px; background: rgba(240,200,215,.5); }
 
-  .activity-name {
-    flex: 1; font-size: .92rem; font-weight: 400; color: var(--text);
-    transition: color .2s;
-  }
-  .activity-item.done .activity-name { color: var(--soft); text-decoration: line-through; text-decoration-color: #e8c0ce; }
+/* add */
+.add-section { margin-top: 1.2rem; }
+.add-row { display: flex; gap: .5rem; }
+.add-emoji-btn {
+  width: 40px; height: 40px; border-radius: 11px; background: var(--blush);
+  border: 1.5px solid rgba(240,200,215,.6); font-size: 1.05rem; cursor: pointer; flex-shrink: 0; transition: background .2s;
+}
+.add-emoji-btn:hover { background: var(--rose); }
+.add-input {
+  flex: 1; border: 1.5px solid rgba(240,200,215,.6); border-radius: 11px; padding: .45rem .85rem;
+  font-family: 'DM Sans', sans-serif; font-size: .88rem; color: var(--text);
+  background: rgba(255,255,255,.7); outline: none; transition: border-color .2s;
+}
+.add-input::placeholder { color: #d4b0bc; }
+.add-input:focus { border-color: #e8a0b8; }
+.add-btn {
+  width: 40px; height: 40px; border-radius: 11px;
+  background: linear-gradient(135deg, #f2c4ce, #c07090);
+  border: none; color: white; font-size: 1.25rem; cursor: pointer; flex-shrink: 0;
+  transition: opacity .2s, transform .15s; display: flex; align-items: center; justify-content: center;
+}
+.add-btn:hover { opacity: .88; transform: scale(1.05); }
+.add-options { display: flex; gap: .35rem; margin-top: .5rem; flex-wrap: wrap; align-items: center; }
+.add-options-label { font-size: .7rem; color: var(--soft); letter-spacing: .06em; white-space: nowrap; }
+.add-option-btn {
+  font-size: .7rem; padding: .25rem .55rem; border-radius: 99px;
+  border: 1.5px solid rgba(240,200,215,.6); background: rgba(255,255,255,.7); color: var(--soft);
+  cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .2s;
+}
+.add-option-btn:hover, .add-option-btn.active { background: var(--blush); border-color: #e8a0b8; color: #c07090; font-weight: 500; }
+.emoji-picker {
+  display: none; flex-wrap: wrap; gap: .35rem; margin-top: .5rem; padding: .65rem;
+  background: rgba(255,255,255,.9); border-radius: 14px;
+  border: 1.5px solid rgba(240,200,215,.5); box-shadow: 0 4px 20px var(--shadow);
+}
+.emoji-picker.open { display: flex; }
+.emoji-opt {
+  width: 30px; height: 30px; border-radius: 8px; border: none; background: var(--blush);
+  cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center;
+  transition: background .15s, transform .1s;
+}
+.emoji-opt:hover { background: var(--rose); transform: scale(1.15); }
 
-  .no-count-badge {
-    font-size: .65rem; color: var(--soft); letter-spacing: .06em;
-    background: var(--blush); border-radius: 99px; padding: .15rem .5rem;
-    white-space: nowrap; flex-shrink: 0;
-  }
+/* monthly */
+.month-nav { display: flex; align-items: center; justify-content: center; gap: .8rem; margin-bottom: 1.4rem; }
+.month-display { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: var(--text); min-width: 160px; text-align: center; }
 
-  .action-btns { display: flex; gap: .5rem; align-items: center; flex-shrink: 0; }
+.monthly-summary { display: flex; flex-direction: column; gap: .6rem; }
+.summary-item {
+  background: rgba(255,255,255,.8); border: 1.5px solid rgba(240,200,215,.45);
+  border-radius: 14px; padding: .75rem 1rem;
+  display: flex; align-items: center; gap: .8rem;
+}
+.summary-emoji { font-size: 1.1rem; flex-shrink: 0; }
+.summary-info { flex: 1; }
+.summary-name { font-size: .88rem; color: var(--text); }
+.summary-sub { font-size: .72rem; color: var(--soft); margin-top: .1rem; }
+.summary-count {
+  font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: #c07090; font-weight: 500; text-align: right;
+}
+.summary-count span { font-size: .7rem; color: var(--soft); font-family: 'DM Sans', sans-serif; }
+.summary-mini-bar { height: 4px; border-radius: 99px; background: var(--blush); margin-top: .35rem; overflow: hidden; }
+.summary-mini-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, #f2c4ce, #c07090); }
 
-  .obs-toggle {
-    background: none; border: none; cursor: pointer;
-    font-size: .72rem; color: var(--soft); letter-spacing: .06em;
-    text-transform: uppercase; font-family: 'DM Sans', sans-serif;
-    padding: 0;
-    display: flex; align-items: center; gap: .3rem;
-    transition: color .2s;
-  }
-  .obs-toggle:hover { color: #c07090; }
-  .obs-toggle svg { transition: transform .2s; }
-  .obs-toggle.open svg { transform: rotate(180deg); }
+.month-total {
+  text-align: center; margin-top: 1rem; padding: 1rem;
+  background: linear-gradient(135deg, rgba(242,196,206,.2), rgba(232,213,245,.2));
+  border-radius: 16px; border: 1px solid rgba(240,200,215,.4);
+}
+.month-total-pct { font-family: 'Cormorant Garamond', serif; font-size: 2rem; color: #c07090; font-weight: 500; }
+.month-total-label { font-size: .75rem; color: var(--soft); letter-spacing: .08em; text-transform: uppercase; margin-top: .2rem; }
 
-  .delete-btn {
-    background: none; border: none; cursor: pointer;
-    font-size: .8rem; color: #e8c0ce;
-    display: flex; align-items: center;
-    transition: color .2s, transform .15s;
-    padding: 0;
-  }
-  .delete-btn:hover { color: #c07090; transform: scale(1.2); }
-
-  .obs-field { display: none; animation: slideDown .25s ease both; }
-  .obs-field.open { display: block; }
-  @keyframes slideDown { from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:translateY(0)} }
-
-  .obs-input {
-    width: 100%; border: 1.5px solid rgba(240,200,215,.6);
-    border-radius: 10px; padding: .5rem .75rem;
-    font-family: 'DM Sans', sans-serif; font-size: .85rem;
-    color: var(--text); background: rgba(255,255,255,.7);
-    resize: none; outline: none; min-height: 52px;
-    transition: border-color .2s;
-  }
-  .obs-input::placeholder { color: #d4b0bc; }
-  .obs-input:focus { border-color: #e8a0b8; }
-
-  .section-label {
-    font-size: .7rem; font-weight: 500; color: var(--soft);
-    letter-spacing: .12em; text-transform: uppercase;
-    margin: 1.2rem 0 .5rem;
-    display: flex; align-items: center; gap: .5rem;
-  }
-  .section-label::after { content: ''; flex: 1; height: 1px; background: rgba(240,200,215,.5); }
-
-  .add-section { margin-top: 1.4rem; }
-  .add-row { display: flex; gap: .6rem; }
-  .add-emoji-btn {
-    width: 42px; height: 42px; border-radius: 12px;
-    background: var(--blush); border: 1.5px solid rgba(240,200,215,.6);
-    font-size: 1.1rem; cursor: pointer; flex-shrink: 0;
-    transition: background .2s;
-  }
-  .add-emoji-btn:hover { background: var(--rose); }
-  .add-input {
-    flex: 1; border: 1.5px solid rgba(240,200,215,.6);
-    border-radius: 12px; padding: .5rem .9rem;
-    font-family: 'DM Sans', sans-serif; font-size: .9rem;
-    color: var(--text); background: rgba(255,255,255,.7);
-    outline: none; transition: border-color .2s;
-  }
-  .add-input::placeholder { color: #d4b0bc; }
-  .add-input:focus { border-color: #e8a0b8; }
-  .add-btn {
-    width: 42px; height: 42px; border-radius: 12px;
-    background: linear-gradient(135deg, #f2c4ce, #c07090);
-    border: none; color: white; font-size: 1.3rem;
-    cursor: pointer; flex-shrink: 0;
-    transition: opacity .2s, transform .15s;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .add-btn:hover { opacity: .88; transform: scale(1.05); }
-
-  .add-options { display: flex; gap: .4rem; margin-top: .6rem; flex-wrap: wrap; align-items: center; }
-  .add-options-label { font-size: .72rem; color: var(--soft); letter-spacing: .06em; white-space: nowrap; }
-  .add-option-btn {
-    font-size: .72rem; padding: .28rem .6rem; border-radius: 99px;
-    border: 1.5px solid rgba(240,200,215,.6);
-    background: rgba(255,255,255,.7); color: var(--soft);
-    cursor: pointer; font-family: 'DM Sans', sans-serif;
-    transition: all .2s; letter-spacing: .03em;
-  }
-  .add-option-btn:hover { background: var(--blush); border-color: #e8a0b8; color: #c07090; }
-  .add-option-btn.active { background: var(--blush); border-color: #e8a0b8; color: #c07090; font-weight: 500; }
-
-  .emoji-picker {
-    display: none; flex-wrap: wrap; gap: .4rem;
-    margin-top: .6rem; padding: .7rem;
-    background: rgba(255,255,255,.9); border-radius: 14px;
-    border: 1.5px solid rgba(240,200,215,.5);
-    box-shadow: 0 4px 20px var(--shadow);
-  }
-  .emoji-picker.open { display: flex; }
-  .emoji-opt {
-    width: 32px; height: 32px; border-radius: 8px; border: none;
-    background: var(--blush); cursor: pointer; font-size: 1.05rem;
-    display: flex; align-items: center; justify-content: center;
-    transition: background .15s, transform .1s;
-  }
-  .emoji-opt:hover { background: var(--rose); transform: scale(1.15); }
-
-  .footer-note {
-    text-align: center; margin-top: 1.8rem;
-    font-size: .72rem; color: #d4b0bc; letter-spacing: .08em;
-  }
-  .empty-day {
-    text-align: center; padding: 1.5rem;
-    color: var(--soft); font-size: .88rem; font-style: italic; line-height: 1.8;
-  }
+.empty-day { text-align: center; padding: 1.2rem; color: var(--soft); font-size: .85rem; font-style: italic; line-height: 1.8; }
+.footer-note { text-align: center; margin-top: 1.6rem; font-size: .7rem; color: #d4b0bc; letter-spacing: .08em; }
 </style>
 </head>
 <body>
@@ -298,94 +258,167 @@
     <p class="tagline">cada dia, um recomeço</p>
   </div>
 
-  <div class="date-nav">
-    <button class="nav-btn" onclick="changeDate(-1)">&#8249;</button>
-    <div class="date-display">
-      <span id="dateText">—</span>
-      <span class="weekday" id="weekdayText">—</span>
-    </div>
-    <button class="nav-btn" onclick="changeDate(1)">&#8250;</button>
+  <!-- verse -->
+  <div class="verse-box">
+    <div class="verse-text" id="verseText">…</div>
+    <div class="verse-ref" id="verseRef">…</div>
   </div>
 
-  <div class="progress-wrap">
-    <div class="progress-info">
-      <span class="progress-label">progresso do dia</span>
-      <span class="progress-pct" id="pctText">0%</span>
-    </div>
-    <div class="progress-bar-bg">
-      <div class="progress-bar-fill" id="progressBar" style="width:0%"></div>
-    </div>
+  <!-- tabs -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('day')">✦ Hoje</button>
+    <button class="tab-btn" onclick="switchTab('month')">📊 Mês</button>
   </div>
 
-  <div class="activities" id="activitiesList"></div>
+  <!-- DAY TAB -->
+  <div class="tab-content active" id="tab-day">
 
-  <div class="add-section">
-    <div class="section-label">adicionar atividade</div>
-    <div class="add-row">
-      <button class="add-emoji-btn" id="emojiToggle" onclick="toggleEmojiPicker()">⭐</button>
-      <input class="add-input" id="newActivityInput" placeholder="Nova atividade…" onkeydown="if(event.key==='Enter') addActivity()">
-      <button class="add-btn" onclick="addActivity()">+</button>
+    <div class="date-nav">
+      <button class="nav-btn" onclick="changeDate(-1)">&#8249;</button>
+      <div class="date-display">
+        <span id="dateText">—</span>
+        <span class="weekday" id="weekdayText">—</span>
+      </div>
+      <button class="nav-btn" onclick="changeDate(1)">&#8250;</button>
     </div>
-    <div class="add-options" id="daySelector">
-      <span class="add-options-label">dias:</span>
-      <button class="add-option-btn" data-day="0" onclick="toggleDay(this)">Dom</button>
-      <button class="add-option-btn active" data-day="1" onclick="toggleDay(this)">Seg</button>
-      <button class="add-option-btn active" data-day="2" onclick="toggleDay(this)">Ter</button>
-      <button class="add-option-btn active" data-day="3" onclick="toggleDay(this)">Qua</button>
-      <button class="add-option-btn active" data-day="4" onclick="toggleDay(this)">Qui</button>
-      <button class="add-option-btn active" data-day="5" onclick="toggleDay(this)">Sex</button>
-      <button class="add-option-btn" data-day="6" onclick="toggleDay(this)">Sáb</button>
+
+    <!-- streak -->
+    <div class="streak-bar">
+      <div class="streak-badge">🔥 <span id="streakCount">0</span> dias</div>
+      <span class="streak-label">seguidos completos</span>
     </div>
-    <div class="add-options">
-      <button class="add-option-btn" id="noCountToggle" onclick="toggleNoCount()">✦ não contar no progresso</button>
+
+    <!-- mood -->
+    <div class="mood-row">
+      <span class="mood-label">humor:</span>
+      <button class="mood-btn" data-mood="ótimo" onclick="setMood('ótimo')">ótimo</button>
+      <button class="mood-btn" data-mood="bem" onclick="setMood('bem')">bem</button>
+      <button class="mood-btn" data-mood="ok" onclick="setMood('ok')">ok</button>
+      <button class="mood-btn" data-mood="difícil" onclick="setMood('difícil')">difícil</button>
     </div>
-    <div class="emoji-picker" id="emojiPicker"></div>
+
+    <!-- progress -->
+    <div class="progress-wrap">
+      <div class="progress-info">
+        <span class="progress-label">progresso do dia</span>
+        <span class="progress-pct" id="pctText">0%</span>
+      </div>
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressBar" style="width:0%"></div></div>
+    </div>
+
+    <div class="activities" id="activitiesList"></div>
+
+    <!-- add -->
+    <div class="add-section">
+      <div class="section-label">adicionar atividade</div>
+      <div class="add-row">
+        <button class="add-emoji-btn" id="emojiToggle" onclick="toggleEmojiPicker()">⭐</button>
+        <input class="add-input" id="newActivityInput" placeholder="Nova atividade…" onkeydown="if(event.key==='Enter') addActivity()">
+        <button class="add-btn" onclick="addActivity()">+</button>
+      </div>
+      <div class="add-options" id="daySelector">
+        <span class="add-options-label">dias:</span>
+        <button class="add-option-btn" data-day="0" onclick="toggleDay(this)">Dom</button>
+        <button class="add-option-btn active" data-day="1" onclick="toggleDay(this)">Seg</button>
+        <button class="add-option-btn active" data-day="2" onclick="toggleDay(this)">Ter</button>
+        <button class="add-option-btn active" data-day="3" onclick="toggleDay(this)">Qua</button>
+        <button class="add-option-btn active" data-day="4" onclick="toggleDay(this)">Qui</button>
+        <button class="add-option-btn active" data-day="5" onclick="toggleDay(this)">Sex</button>
+        <button class="add-option-btn" data-day="6" onclick="toggleDay(this)">Sáb</button>
+      </div>
+      <div class="add-options">
+        <button class="add-option-btn" id="noCountToggle" onclick="toggleNoCount()">✦ não contar no progresso</button>
+      </div>
+      <div class="emoji-picker" id="emojiPicker"></div>
+    </div>
+
+  </div>
+
+  <!-- MONTH TAB -->
+  <div class="tab-content" id="tab-month">
+    <div class="month-nav">
+      <button class="nav-btn" onclick="changeMonth(-1)">&#8249;</button>
+      <div class="month-display" id="monthDisplay">—</div>
+      <button class="nav-btn" onclick="changeMonth(1)">&#8250;</button>
+    </div>
+    <div class="monthly-summary" id="monthlySummary"></div>
+    <div class="month-total" id="monthTotal"></div>
   </div>
 
   <p class="footer-note">✦ seus dados ficam salvos no navegador ✦</p>
 </div>
 
 <script>
-const EMOJIS = ['📖','🏋️','☀️','🏠','📚','✏️','💧','🧘','🎨','🍎','💊','🛁','🌙','🎵','🧹','🛒','💌','🌸','⭐','🦋','🌿','💪','🙏','✨','🎯','📝','👟','🏃','🥗','🫧'];
+const VERSES = [
+  { text: "Tudo posso naquele que me fortalece.", ref: "Filipenses 4:13" },
+  { text: "O Senhor é o meu pastor e nada me faltará.", ref: "Salmos 23:1" },
+  { text: "Entrega o teu caminho ao Senhor; confia nele, e ele tudo fará.", ref: "Salmos 37:5" },
+  { text: "Porque eu bem sei os planos que tenho para vocês, diz o Senhor.", ref: "Jeremias 29:11" },
+  { text: "Mas os que esperam no Senhor renovam as suas forças.", ref: "Isaías 40:31" },
+  { text: "Sede fortes e corajosos. Não temais.", ref: "Josué 1:9" },
+  { text: "A fé é a certeza daquilo que esperamos e a prova das coisas que não vemos.", ref: "Hebreus 11:1" },
+  { text: "Busca primeiro o reino de Deus e a sua justiça, e todas estas coisas vos serão acrescentadas.", ref: "Mateus 6:33" },
+  { text: "Alegrai-vos sempre no Senhor; outra vez digo: alegrai-vos.", ref: "Filipenses 4:4" },
+  { text: "O amor é paciente, é bondoso; o amor não tem inveja.", ref: "1 Coríntios 13:4" },
+  { text: "Confia no Senhor de todo o teu coração e não te estribes no teu próprio entendimento.", ref: "Provérbios 3:5" },
+  { text: "Deus é o nosso refúgio e força, socorro bem presente na angústia.", ref: "Salmos 46:1" },
+  { text: "Não vos conformeis com este século, mas transformai-vos pela renovação do vosso entendimento.", ref: "Romanos 12:2" },
+  { text: "Tudo tem o seu tempo determinado; há tempo para todo propósito debaixo do céu.", ref: "Eclesiastes 3:1" },
+  { text: "Porque onde estiverem dois ou três reunidos em meu nome, ali estou no meio deles.", ref: "Mateus 18:20" },
+  { text: "Aquele que habita no esconderijo do Altíssimo, à sombra do Onipotente descansará.", ref: "Salmos 91:1" },
+  { text: "Não vos inquieteis com nada; em tudo, porém, apresentai os vossos pedidos a Deus.", ref: "Filipenses 4:6" },
+  { text: "Sejam fortes e corajosos. Não se apavorem nem desanimem.", ref: "Deuteronômio 31:6" },
+  { text: "O Senhor te abençoe e te guarde; o Senhor faça resplandecer o seu rosto sobre ti.", ref: "Números 6:24-25" },
+  { text: "Portanto, não tema, pois estou com você; não se desanime, pois sou o seu Deus.", ref: "Isaías 41:10" },
+  { text: "A graça do Senhor Jesus seja com o teu espírito.", ref: "Filemom 1:25" },
+  { text: "Deita sobre o Senhor o teu cuidado, e ele te susterá.", ref: "Salmos 55:22" },
+  { text: "O coração alegre é bom remédio, mas o espírito abatido seca os ossos.", ref: "Provérbios 17:22" },
+  { text: "Porque pela graça sois salvos, mediante a fé.", ref: "Efésios 2:8" },
+  { text: "E conhecereis a verdade, e a verdade vos libertará.", ref: "João 8:32" },
+  { text: "Nisto conhecerão todos que sois meus discípulos: se tiverdes amor uns aos outros.", ref: "João 13:35" },
+  { text: "O Senhor dará força ao seu povo; o Senhor abençoará o seu povo com paz.", ref: "Salmos 29:11" },
+  { text: "Permanecei em mim, e eu permanecerei em vós.", ref: "João 15:4" },
+  { text: "Porque Deus não nos deu espírito de covardia, mas de poder, de amor e de moderação.", ref: "2 Timóteo 1:7" },
+  { text: "Louvai o Senhor, porque ele é bom; porque a sua misericórdia dura para sempre.", ref: "Salmos 136:1" },
+  { text: "A paz de Deus, que excede todo o entendimento, guardará os vossos corações.", ref: "Filipenses 4:7" },
+];
+
+const EMOJIS = ['📖','🏋️','☀️','🏠','📚','✏️','💧','🧘','🎨','🍎','💊','🛁','🌙','🎵','🧹','🛒','💌','🌸','⭐','🦋','🌿','💪','🙏','✨','🎯','📝','👟','🏃','🥗','🫧','💑'];
 const WEEKDAYS = ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'];
-const MONTHS   = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+const MONTHS_LONG = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
 
 // 0=Dom 1=Seg 2=Ter 3=Qua 4=Qui 5=Sex 6=Sáb
 const DEFAULT_ACTIVITIES = [
-  { id: 1, emoji: '📖', name: 'Devocional',     days: [0,1,2,3,4,5,6], countProgress: true  },
-  { id: 2, emoji: '🏋️', name: 'Musculação',      days: [1,2,4,5],       countProgress: true  },
-  { id: 3, emoji: '🏃', name: 'Cardio',          days: [1,3,6],         countProgress: true  },
-  { id: 4, emoji: '☀️', name: 'Tomar sol',       days: [0,1,2,3,4,5,6], countProgress: true  },
-  { id: 5, emoji: '🏠', name: 'Culto no lar',    days: [3],             countProgress: true  },
-  { id: 6, emoji: '📚', name: 'Leitura',         days: [0,1,2,3,4,5,6], countProgress: true  },
-  { id: 7, emoji: '👟', name: '8 mil passos',    days: [0,1,2,3,4,5,6], countProgress: true  },
+  { id: 1, emoji: '📖', name: 'Devocional',       days: [0,1,2,3,4,5,6], countProgress: true  },
+  { id: 2, emoji: '🏋️', name: 'Musculação',        days: [1,2,4,5],       countProgress: true  },
+  { id: 3, emoji: '🏃', name: 'Cardio',            days: [1,3,6],         countProgress: true  },
+  { id: 4, emoji: '☀️', name: 'Tomar sol',         days: [0,1,2,3,4,5,6], countProgress: true  },
+  { id: 5, emoji: '🏠', name: 'Culto no lar',      days: [3],             countProgress: true  },
+  { id: 6, emoji: '📚', name: 'Leitura',           days: [0,1,2,3,4,5,6], countProgress: true  },
+  { id: 7, emoji: '👟', name: '8 mil passos',      days: [0,1,2,3,4,5,6], countProgress: true  },
   { id: 9, emoji: '💑', name: 'Orar com o marido', days: [0,1,2,3,4,5,6], countProgress: true  },
-  { id: 8, emoji: '🍎', name: 'Alimentação',     days: [0,1,2,3,4,5,6], countProgress: false },
+  { id: 8, emoji: '🍎', name: 'Alimentação',       days: [0,1,2,3,4,5,6], countProgress: false },
 ];
 
-let currentDate = new Date();
-currentDate.setHours(0,0,0,0);
+let currentDate = new Date(); currentDate.setHours(0,0,0,0);
+let currentMonth = new Date(); currentMonth.setDate(1); currentMonth.setHours(0,0,0,0);
 let selectedEmoji = '⭐';
 let newActivityDays = [1,2,3,4,5];
 let newActivityNoCount = false;
 
+// storage
 function dateKey(d) { return `${d.getFullYear()}_${d.getMonth()}_${d.getDate()}`; }
-function storageKey(d) { return `planner_states_${dateKey(d)}`; }
-function deletedKey(d) { return `planner_deleted_${dateKey(d)}`; }
-function customKey(d)  { return `planner_custom_${dateKey(d)}`; }
-
-function getStates(d)  { try { return JSON.parse(localStorage.getItem(storageKey(d))) || {}; } catch { return {}; } }
-function setStates(d,o){ localStorage.setItem(storageKey(d), JSON.stringify(o)); }
-function getDeleted(d) { try { return JSON.parse(localStorage.getItem(deletedKey(d))) || []; } catch { return []; } }
-function setDeleted(d,a){ localStorage.setItem(deletedKey(d), JSON.stringify(a)); }
-function getCustom(d)  { try { return JSON.parse(localStorage.getItem(customKey(d))) || []; } catch { return []; } }
-function setCustom(d,a){ localStorage.setItem(customKey(d), JSON.stringify(a)); }
+function getStates(d)   { try { return JSON.parse(localStorage.getItem(`ps_${dateKey(d)}`)) || {}; } catch { return {}; } }
+function setStates(d,o) { localStorage.setItem(`ps_${dateKey(d)}`, JSON.stringify(o)); }
+function getDeleted(d)  { try { return JSON.parse(localStorage.getItem(`pd_${dateKey(d)}`)) || []; } catch { return []; } }
+function setDeleted(d,a){ localStorage.setItem(`pd_${dateKey(d)}`, JSON.stringify(a)); }
+function getCustom(d)   { try { return JSON.parse(localStorage.getItem(`pc_${dateKey(d)}`)) || []; } catch { return []; } }
+function setCustom(d,a) { localStorage.setItem(`pc_${dateKey(d)}`, JSON.stringify(a)); }
+function getMood(d)     { return localStorage.getItem(`pm_${dateKey(d)}`) || ''; }
+function setMoodStore(d,m){ localStorage.setItem(`pm_${dateKey(d)}`, m); }
 
 function buildDayActivities(d) {
-  const dow = d.getDay();
-  const deleted = getDeleted(d);
-  const custom  = getCustom(d);
-  const states  = getStates(d);
+  const dow = d.getDay(), deleted = getDeleted(d), custom = getCustom(d), states = getStates(d);
   const defaults = DEFAULT_ACTIVITIES
     .filter(a => a.days.includes(dow) && !deleted.includes(a.id))
     .map(a => ({ ...a, done: !!states[a.id], obs: states[`obs_${a.id}`] || '' }));
@@ -393,34 +426,60 @@ function buildDayActivities(d) {
   return [...defaults, ...customs];
 }
 
+function isDayComplete(d) {
+  const acts = buildDayActivities(d);
+  const countable = acts.filter(a => a.countProgress);
+  return countable.length > 0 && countable.every(a => a.done);
+}
+
+function calcStreak() {
+  let streak = 0;
+  const d = new Date(currentDate);
+  // check today first
+  if (!isDayComplete(d)) {
+    d.setDate(d.getDate() - 1);
+  }
+  while (true) {
+    if (isDayComplete(d)) { streak++; d.setDate(d.getDate() - 1); }
+    else break;
+    if (streak > 365) break;
+  }
+  return streak;
+}
+
+// verse of the day
+function setVerse() {
+  const today = new Date();
+  const idx = (today.getFullYear() * 366 + today.getMonth() * 31 + today.getDate()) % VERSES.length;
+  const v = VERSES[idx];
+  document.getElementById('verseText').textContent = `"${v.text}"`;
+  document.getElementById('verseRef').textContent = v.ref;
+}
+
 function render() {
   updateDateDisplay();
   const activities = buildDayActivities(currentDate);
   renderActivities(activities);
   updateProgress(activities);
+  updateMoodUI();
+  document.getElementById('streakCount').textContent = calcStreak();
 }
 
 function updateDateDisplay() {
   const d = currentDate;
-  document.getElementById('dateText').textContent =
-    `${String(d.getDate()).padStart(2,'0')} de ${MONTHS[d.getMonth()]} de ${d.getFullYear()}`;
+  document.getElementById('dateText').textContent = `${String(d.getDate()).padStart(2,'0')} de ${MONTHS_LONG[d.getMonth()]} de ${d.getFullYear()}`;
   document.getElementById('weekdayText').textContent = WEEKDAYS[d.getDay()];
 }
 
 function renderActivities(activities) {
   const list = document.getElementById('activitiesList');
   list.innerHTML = '';
-  if (!activities.length) {
-    list.innerHTML = '<p class="empty-day">Nenhuma atividade para hoje 🌸<br>Adicione uma abaixo!</p>';
-    return;
-  }
-  const countable   = activities.filter(a => a.countProgress);
+  if (!activities.length) { list.innerHTML = '<p class="empty-day">Nenhuma atividade para hoje 🌸<br>Adicione uma abaixo!</p>'; return; }
+  const countable = activities.filter(a => a.countProgress);
   const uncountable = activities.filter(a => !a.countProgress);
   countable.forEach((act, i) => list.appendChild(makeItem(act, i)));
   if (uncountable.length) {
-    const lbl = document.createElement('div');
-    lbl.className = 'section-label';
-    lbl.textContent = 'acompanhamento';
+    const lbl = document.createElement('div'); lbl.className = 'section-label'; lbl.textContent = 'acompanhamento';
     list.appendChild(lbl);
     uncountable.forEach((act, i) => list.appendChild(makeItem(act, i)));
   }
@@ -429,7 +488,7 @@ function renderActivities(activities) {
 function makeItem(act, i) {
   const item = document.createElement('div');
   item.className = 'activity-item' + (act.done ? ' done' : '') + (!act.countProgress ? ' no-count' : '');
-  item.style.animationDelay = `${i * 0.06}s`;
+  item.style.animationDelay = `${i * 0.055}s`;
   item.innerHTML = `
     <div class="activity-row">
       <button class="check-btn" onclick="toggleDone(${act.id})">✓</button>
@@ -438,16 +497,14 @@ function makeItem(act, i) {
       ${!act.countProgress ? '<span class="no-count-badge">livre</span>' : ''}
       <div class="action-btns">
         <button class="obs-toggle" id="obsToggle_${act.id}" onclick="toggleObs(${act.id})">
-          obs
-          <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="#b09aa8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          obs <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="#b09aa8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
-        <button class="delete-btn" onclick="deleteActivity(${act.id})" title="Remover hoje">✕</button>
+        <button class="delete-btn" onclick="deleteActivity(${act.id})">✕</button>
       </div>
     </div>
     <div class="obs-field${act.obs ? ' open' : ''}" id="obsField_${act.id}">
       <textarea class="obs-input" placeholder="Adicione uma observação…" oninput="saveObs(${act.id}, this.value)">${act.obs}</textarea>
-    </div>
-  `;
+    </div>`;
   return item;
 }
 
@@ -459,76 +516,127 @@ function updateProgress(activities) {
   document.getElementById('progressBar').style.width = pct + '%';
 }
 
-function toggleDone(id) {
-  const s = getStates(currentDate);
-  s[id] = !s[id];
-  setStates(currentDate, s);
-  render();
+function updateMoodUI() {
+  const mood = getMood(currentDate);
+  document.querySelectorAll('.mood-btn').forEach(b => b.classList.toggle('active', b.dataset.mood === mood));
 }
 
+function toggleDone(id) {
+  const s = getStates(currentDate); s[id] = !s[id]; setStates(currentDate, s); render();
+}
 function toggleObs(id) {
   document.getElementById(`obsField_${id}`).classList.toggle('open');
   document.getElementById(`obsToggle_${id}`).classList.toggle('open');
 }
-
 function saveObs(id, val) {
-  const s = getStates(currentDate);
-  s[`obs_${id}`] = val;
-  setStates(currentDate, s);
+  const s = getStates(currentDate); s[`obs_${id}`] = val; setStates(currentDate, s);
   updateProgress(buildDayActivities(currentDate));
 }
-
 function deleteActivity(id) {
   if (DEFAULT_ACTIVITIES.find(a => a.id === id)) {
-    const del = getDeleted(currentDate);
-    if (!del.includes(id)) del.push(id);
-    setDeleted(currentDate, del);
-  } else {
-    setCustom(currentDate, getCustom(currentDate).filter(a => a.id !== id));
-  }
+    const del = getDeleted(currentDate); if (!del.includes(id)) del.push(id); setDeleted(currentDate, del);
+  } else { setCustom(currentDate, getCustom(currentDate).filter(a => a.id !== id)); }
   render();
 }
-
-function changeDate(delta) {
-  currentDate = new Date(currentDate);
-  currentDate.setDate(currentDate.getDate() + delta);
-  render();
-}
+function setMood(mood) { setMoodStore(currentDate, mood); updateMoodUI(); }
+function changeDate(delta) { currentDate = new Date(currentDate); currentDate.setDate(currentDate.getDate() + delta); render(); }
 
 function addActivity() {
   const input = document.getElementById('newActivityInput');
-  const name = input.value.trim();
-  if (!name) return;
+  const name = input.value.trim(); if (!name) return;
   const custom = getCustom(currentDate);
   custom.push({ id: Date.now(), emoji: selectedEmoji, name, days: [...newActivityDays], countProgress: !newActivityNoCount });
-  setCustom(currentDate, custom);
-  input.value = '';
-  render();
+  setCustom(currentDate, custom); input.value = ''; render();
 }
-
 function toggleDay(btn) {
   btn.classList.toggle('active');
   newActivityDays = Array.from(document.querySelectorAll('#daySelector .add-option-btn.active')).map(b => parseInt(b.dataset.day));
 }
-
 function toggleNoCount() {
   newActivityNoCount = !newActivityNoCount;
   document.getElementById('noCountToggle').classList.toggle('active', newActivityNoCount);
 }
-
 function buildEmojiPicker() {
   const picker = document.getElementById('emojiPicker');
   EMOJIS.forEach(em => {
-    const btn = document.createElement('button');
-    btn.className = 'emoji-opt';
-    btn.textContent = em;
+    const btn = document.createElement('button'); btn.className = 'emoji-opt'; btn.textContent = em;
     btn.onclick = () => { selectedEmoji = em; document.getElementById('emojiToggle').textContent = em; picker.classList.remove('open'); };
     picker.appendChild(btn);
   });
 }
 function toggleEmojiPicker() { document.getElementById('emojiPicker').classList.toggle('open'); }
 
+// tabs
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', (i===0&&tab==='day')||(i===1&&tab==='month')));
+  document.getElementById('tab-day').classList.toggle('active', tab === 'day');
+  document.getElementById('tab-month').classList.toggle('active', tab === 'month');
+  if (tab === 'month') renderMonth();
+}
+
+// monthly
+function changeMonth(delta) {
+  currentMonth = new Date(currentMonth);
+  currentMonth.setMonth(currentMonth.getMonth() + delta);
+  renderMonth();
+}
+
+function renderMonth() {
+  const year = currentMonth.getFullYear(), month = currentMonth.getMonth();
+  document.getElementById('monthDisplay').textContent = `${MONTHS_LONG[month]} de ${year}`;
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  // collect all default + gather unique activities seen this month
+  const actMap = {}; // id -> {emoji, name, countProgress, expected, done}
+  DEFAULT_ACTIVITIES.forEach(a => { actMap[a.id] = { ...a, expected: 0, done: 0 }; });
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    const d = new Date(year, month, day); d.setHours(0,0,0,0);
+    const dow = d.getDay();
+    const deleted = getDeleted(d);
+    const states = getStates(d);
+    const custom = getCustom(d);
+
+    DEFAULT_ACTIVITIES.forEach(a => {
+      if (a.days.includes(dow) && !deleted.includes(a.id)) {
+        actMap[a.id].expected++;
+        if (states[a.id]) actMap[a.id].done++;
+      }
+    });
+    custom.forEach(a => {
+      if (!actMap[a.id]) actMap[a.id] = { ...a, expected: 0, done: 0 };
+      actMap[a.id].expected++;
+      if (states[a.id]) actMap[a.id].done++;
+    });
+  }
+
+  const container = document.getElementById('monthlySummary');
+  container.innerHTML = '';
+  const items = Object.values(actMap).filter(a => a.expected > 0);
+  let totalDone = 0, totalExpected = 0;
+  items.forEach(a => {
+    if (a.countProgress) { totalDone += a.done; totalExpected += a.expected; }
+    const pct = a.expected ? Math.round(a.done / a.expected * 100) : 0;
+    const el = document.createElement('div'); el.className = 'summary-item';
+    el.innerHTML = `
+      <span class="summary-emoji">${a.emoji}</span>
+      <div class="summary-info">
+        <div class="summary-name">${a.name}</div>
+        <div class="summary-mini-bar"><div class="summary-mini-fill" style="width:${pct}%"></div></div>
+        <div class="summary-sub">${pct}% de aproveitamento</div>
+      </div>
+      <div class="summary-count">${a.done}<span>/${a.expected}</span></div>`;
+    container.appendChild(el);
+  });
+
+  const totalPct = totalExpected ? Math.round(totalDone / totalExpected * 100) : 0;
+  document.getElementById('monthTotal').innerHTML = `
+    <div class="month-total-pct">${totalPct}%</div>
+    <div class="month-total-label">de aproveitamento geral do mês</div>`;
+}
+
 buildEmojiPicker();
+setVerse();
 render();
 </script>
 </body>
